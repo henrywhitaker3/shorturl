@@ -38,7 +38,7 @@ func (t *testWorker) Executions() int {
 }
 
 func TestItRunsWorkers(t *testing.T) {
-	app, cancel := test.App(t)
+	app, cancel := test.App(t, true)
 	defer cancel()
 
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*3)
@@ -50,7 +50,8 @@ func TestItRunsWorkers(t *testing.T) {
 		executions: 0,
 	}
 
-	runner := workers.NewRunner(ctx, app.Redis)
+	runner, err := workers.NewRunner(ctx, app.Redis)
+	require.Nil(t, err)
 	runner.Register(worker)
 
 	time.Sleep(time.Millisecond * 500)
