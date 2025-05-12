@@ -12,7 +12,6 @@ func New() *cobra.Command {
 	}
 
 	cmd.AddCommand(newKey())
-	cmd.AddCommand(newJwt())
 
 	return cmd
 }

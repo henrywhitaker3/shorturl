@@ -9,14 +9,13 @@ import (
 	"github.com/henrywhitaker3/go-template/internal/config"
 	"github.com/henrywhitaker3/go-template/internal/crypto"
 	ohttp "github.com/henrywhitaker3/go-template/internal/http"
-	"github.com/henrywhitaker3/go-template/internal/jwt"
 	"github.com/henrywhitaker3/go-template/internal/metrics"
 	"github.com/henrywhitaker3/go-template/internal/postgres"
 	"github.com/henrywhitaker3/go-template/internal/probes"
 	"github.com/henrywhitaker3/go-template/internal/queue"
 	"github.com/henrywhitaker3/go-template/internal/redis"
 	"github.com/henrywhitaker3/go-template/internal/storage"
-	"github.com/henrywhitaker3/go-template/internal/users"
+	"github.com/henrywhitaker3/go-template/internal/urls"
 	"github.com/henrywhitaker3/go-template/internal/workers"
 	"github.com/redis/rueidis"
 	"github.com/thanos-io/objstore"
@@ -44,16 +43,13 @@ func RegisterBase(b *boiler.Boiler) {
 		boiler.MustRegister(b, RegisterRedis)
 		boiler.MustRegister(b, RegisterCache)
 	}
-	if *conf.Jwt.Enabled {
-		boiler.MustRegister(b, RegisterJWT)
-	}
 	if *conf.Encryption.Enabled {
 		boiler.MustRegister(b, RegisterEncryption)
 	}
 	if *conf.Storage.Enabled {
 		boiler.MustRegister(b, RegisterStorage)
 	}
-	boiler.MustRegisterDeferred(b, RegisterUsers)
+	boiler.MustRegisterDeferred(b, RegisterUrls)
 	if *conf.Queue.Enabled {
 		boiler.MustRegister(b, RegisterQueue)
 	}
@@ -62,6 +58,7 @@ func RegisterBase(b *boiler.Boiler) {
 func RegisterConsumers(b *boiler.Boiler) {
 	RegisterBase(b)
 	boiler.MustRegisterNamedDefered(b, DefaultQueue, RegisterDefaultQueueWorker)
+	boiler.MustRegisterNamedDefered(b, CreateQueue, RegisterCreateQueueWorker)
 }
 
 func RegisterDB(b *boiler.Boiler) (*sql.DB, error) {
@@ -122,24 +119,17 @@ func RegisterQueries(b *boiler.Boiler) (*queries.Queries, error) {
 	return queries.New(db), nil
 }
 
-func RegisterUsers(b *boiler.Boiler) (*users.Users, error) {
+func RegisterUrls(b *boiler.Boiler) (urls.Urls, error) {
 	q, err := boiler.Resolve[*queries.Queries](b)
 	if err != nil {
 		return nil, err
 	}
-	return users.New(q), nil
-}
-
-func RegisterJWT(b *boiler.Boiler) (*jwt.Jwt, error) {
-	conf, err := boiler.Resolve[*config.Config](b)
-	if err != nil {
-		return nil, err
-	}
-	redis, err := boiler.Resolve[rueidis.Client](b)
-	if err != nil {
-		return nil, err
-	}
-	return jwt.New(conf.Jwt.Secret, redis), nil
+	return urls.New(urls.ServiceOpts{
+		DB: q,
+		Generator: urls.NewAliasGenerator(urls.AliasGeneratorOpts{
+			DB: q,
+		}),
+	}), nil
 }
 
 func RegisterHTTP(b *boiler.Boiler) (*ohttp.Http, error) {
@@ -203,6 +193,7 @@ func RegisterStorage(b *boiler.Boiler) (objstore.Bucket, error) {
 
 const (
 	DefaultQueue = "queue:default"
+	CreateQueue  = "queue:create"
 )
 
 func RegisterDefaultQueueWorker(
@@ -226,4 +217,39 @@ func RegisterDefaultQueueWorker(
 		Queues:      []queue.Queue{queue.DefaultQueue},
 		Concurrency: conc,
 	})
+}
+
+func RegisterCreateQueueWorker(
+	b *boiler.Boiler,
+) (*queue.Worker, error) {
+	conf, err := boiler.Resolve[*config.Config](b)
+	if err != nil {
+		return nil, err
+	}
+	conc := 0
+	if conf.Queue.Concurrency != nil {
+		conc = *conf.Queue.Concurrency
+	}
+
+	svc, err := boiler.Resolve[urls.Urls](b)
+	if err != nil {
+		return nil, err
+	}
+	handler := urls.NewCreateJobHandler(svc)
+
+	worker, err := queue.NewWorker(b.Context(), queue.ServerOpts{
+		Redis: queue.RedisOpts{
+			Addr:        conf.Redis.Addr,
+			Password:    conf.Redis.Password,
+			DB:          conf.Queue.DB,
+			OtelEnabled: *conf.Telemetry.Tracing.Enabled,
+		},
+		Queues:      []queue.Queue{queue.Create},
+		Concurrency: conc,
+	})
+	if err != nil {
+		return nil, err
+	}
+	worker.RegisterHandler(queue.CreateTask, handler)
+	return worker, nil
 }

@@ -1,6 +1,6 @@
 schema "public" {}
 
-table "users" {
+table "urls" {
   schema = schema.public
 
   column "id" {
@@ -8,49 +8,26 @@ table "users" {
     null = false
   }
 
-  column "name" {
+  column "alias" {
     type = text
     null = false
   }
 
-  column "email" {
+  column "url" {
     type = text
     null = false
   }
 
-  column "password" {
+  column "domain" {
     type = text
     null = false
-  }
-
-  column "admin" {
-    type    = bool
-    default = false
-  }
-
-  column "created_at" {
-    type    = bigint
-    null    = false
-    default = "EXTRACT(epoch FROM NOW())"
-  }
-
-  column "updated_at" {
-    type    = bigint
-    null    = false
-    default = "EXTRACT(epoch FROM NOW())"
-  }
-
-  column "deleted_at" {
-    type = bigint
-    null = true
   }
 
   primary_key {
     columns = [column.id]
   }
-
-  index "idx_users_email" {
-    columns = [column.email]
+  index "idx_urls_alias" {
+    columns = [column.alias]
     unique  = true
   }
 }

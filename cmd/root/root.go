@@ -8,7 +8,6 @@ import (
 	"github.com/henrywhitaker3/go-template/cmd/secrets"
 	"github.com/henrywhitaker3/go-template/cmd/seed"
 	"github.com/henrywhitaker3/go-template/cmd/serve"
-	"github.com/henrywhitaker3/go-template/cmd/token"
 	"github.com/spf13/cobra"
 )
 
@@ -35,7 +34,6 @@ func New(b *boiler.Boiler) *cobra.Command {
 	cmd.AddCommand(consume.New(b))
 	cmd.AddCommand(seed.New(b))
 	cmd.AddCommand(secrets.New())
-	cmd.AddCommand(token.New(b))
 
 	cmd.PersistentFlags().
 		StringP("config", "c", "go-template.yaml", "The path to the api config file")

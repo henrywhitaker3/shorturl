@@ -11,9 +11,7 @@ import (
 	"github.com/henrywhitaker3/boiler"
 	"github.com/henrywhitaker3/go-template/internal/config"
 	"github.com/henrywhitaker3/go-template/internal/http/common"
-	"github.com/henrywhitaker3/go-template/internal/http/handlers/users"
 	"github.com/henrywhitaker3/go-template/internal/http/middleware"
-	"github.com/henrywhitaker3/go-template/internal/jwt"
 	"github.com/henrywhitaker3/go-template/internal/logger"
 	"github.com/henrywhitaker3/go-template/internal/metrics"
 	"github.com/jackc/pgx/v5/pgconn"
@@ -43,10 +41,6 @@ func New(b *boiler.Boiler) *Http {
 			boiler.MustResolve[*metrics.Metrics](b).Registry,
 		))
 	}
-	e.Use(middleware.User(middleware.UserOpts{
-		Config: conf,
-		Jwt:    boiler.MustResolve[*jwt.Jwt](b),
-	}))
 	if *conf.Telemetry.Sentry.Enabled {
 		e.Use(sentryecho.New(sentryecho.Options{
 			Repanic: true,
@@ -63,14 +57,6 @@ func New(b *boiler.Boiler) *Http {
 	}
 
 	h.e.HTTPErrorHandler = h.handleError
-
-	h.Register(users.NewLogin(b))
-	h.Register(users.NewLogout(b))
-	h.Register(users.NewRegister(b))
-	h.Register(users.NewMe())
-	h.Register(users.NewMakeAdmin(b))
-	h.Register(users.NewRemoveAdmin(b))
-	h.Register(users.NewIsAdminHandler(b))
 
 	return h
 }

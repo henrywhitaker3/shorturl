@@ -13,9 +13,7 @@ import (
 	"github.com/henrywhitaker3/boiler"
 	"github.com/henrywhitaker3/go-template/internal/app"
 	"github.com/henrywhitaker3/go-template/internal/config"
-	"github.com/henrywhitaker3/go-template/internal/jwt"
 	"github.com/henrywhitaker3/go-template/internal/queue"
-	"github.com/henrywhitaker3/go-template/internal/users"
 	"github.com/stretchr/testify/require"
 	"github.com/testcontainers/testcontainers-go"
 	"github.com/testcontainers/testcontainers-go/log"
@@ -32,31 +30,6 @@ func init() {
 	cwd, _ := os.Getwd()
 	rootPath := re.Find([]byte(cwd))
 	root = string(rootPath)
-}
-
-func User(t *testing.T, b *boiler.Boiler) (*users.User, string) {
-	u, err := boiler.Resolve[*users.Users](b)
-	require.Nil(t, err)
-	password := Sentence(5)
-
-	user, err := u.CreateUser(context.Background(), users.CreateParams{
-		Name:     Word(),
-		Email:    Email(),
-		Password: password,
-	})
-	require.Nil(t, err)
-	return user, password
-}
-
-func Token(t *testing.T, b *boiler.Boiler, user *users.User) string {
-	require.NotNil(t, user)
-
-	jwt, err := boiler.Resolve[*jwt.Jwt](b)
-	require.Nil(t, err)
-
-	token, err := jwt.NewForUser(user, time.Minute)
-	require.Nil(t, err)
-	return token
 }
 
 func minio(t *testing.T, conf *config.Storage, ctx context.Context) {

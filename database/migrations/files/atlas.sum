@@ -1,3 +1,3 @@
-h1:w1pJgn62H6jfjF4XOTEaTHw6UpDt5zLfXk7KMq5nPyY=
-20240812114724_create_users_table.down.sql h1:7tPpZpoLvBN6sTaeIoDrQTs4gaVmLSivCl/whq77m7A=
-20240812114724_create_users_table.up.sql h1:mTrQrcUulShJik1yItATl7ni4CvKvgGXxC2C3W1QaHk=
+h1:8MJ4GqPHcckD9vqXBbhNFX6IhueS/6VEpfToPtR4qIU=
+20250512155138_create_urls_table.up.sql h1:sO9D5JSmgXLrhT221q82HdoRWehP060PmaoYA98F/Oo=
+20250512160407_alter_urls_add_domain.up.sql h1:1bH5lk8eIkGpOS0F6lgzU87ib7pXIvuANazVib0v5aA=
