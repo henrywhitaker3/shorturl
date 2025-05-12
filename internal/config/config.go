@@ -183,6 +183,10 @@ type Generator struct {
 	Interval   time.Duration `yaml:"interval"    env:"INTERVAL, overwrite, default=5s"`
 }
 
+type Cache struct {
+	Size int `yaml:"size" env:"SIZE, overwrite, default=500"`
+}
+
 type Config struct {
 	Name        string `yaml:"name"        env:"APP_NAME"`
 	Environment string `yaml:"environment" env:"APP_ENV, overwrite, default=dev"`
@@ -204,6 +208,7 @@ type Config struct {
 	Runner Runner `yaml:"runner" env:", prefix=RUNNER_"`
 
 	Generator Generator `yaml:"generator" env:", prefix=GENERATOR_"`
+	Cache     Cache     `yaml:"cache"     env:", prefix=CACHE_"`
 }
 
 func Load(path string) (*Config, error) {

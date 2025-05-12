@@ -13,7 +13,6 @@ config:
   name: shorturl
   environment: prod
   log_level: info
-  jwt_secret: "{{ .jwt_secret }}"
   encryption_key: "{{ .encryption_key }}"
 
   database:

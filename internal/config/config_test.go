@@ -9,7 +9,6 @@ import (
 
 	"github.com/henrywhitaker3/shorturl/internal/config"
 	"github.com/henrywhitaker3/shorturl/internal/crypto"
-	"github.com/henrywhitaker3/shorturl/internal/jwt"
 	"github.com/stretchr/testify/require"
 	"gopkg.in/yaml.v3"
 )
@@ -92,12 +91,6 @@ func DefaultConfig(t *testing.T) *config.Config {
 			Enabled: toPtr(true),
 			Secret: must(t, func() (string, error) {
 				return crypto.GenerateAesKey(64)
-			}),
-		},
-		Jwt: config.Jwt{
-			Enabled: toPtr(true),
-			Secret: must(t, func() (string, error) {
-				return jwt.GenerateSecret(64)
 			}),
 		},
 		LogLevel: "debug",

@@ -141,12 +141,26 @@ func RegisterUrls(b *boiler.Boiler) (urls.Urls, error) {
 	if err != nil {
 		return nil, err
 	}
+	config, err := boiler.Resolve[*config.Config](b)
+	if err != nil {
+		return nil, err
+	}
+	met, err := boiler.Resolve[*metrics.Metrics](b)
+	if err != nil {
+		return nil, err
+	}
 
-	return urls.New(urls.ServiceOpts{
+	svc := urls.New(urls.ServiceOpts{
 		DB:    q,
 		Conn:  db,
 		Alias: alias,
-	}), nil
+	})
+
+	return urls.NewCache(urls.CacheOpts{
+		Service:  svc,
+		Size:     config.Cache.Size,
+		Registry: met.Registry,
+	})
 }
 
 func RegisterClicks(b *boiler.Boiler) (*urls.Clicks, error) {
