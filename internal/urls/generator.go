@@ -2,6 +2,7 @@ package urls
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"log/slog"
 	"math"
@@ -75,7 +76,7 @@ func (a *AliasGenerator) Interval() workers.Interval {
 }
 
 func (a *AliasGenerator) Timeout() time.Duration {
-	return time.Second * 30
+	return time.Minute
 }
 
 func (a *AliasGenerator) Run(ctx context.Context) error {
@@ -95,6 +96,9 @@ func (a *AliasGenerator) Run(ctx context.Context) error {
 	for _, al := range aliases {
 		err := a.alias.Create(ctx, al)
 		if err != nil {
+			if errors.Is(err, context.DeadlineExceeded) {
+				return context.DeadlineExceeded
+			}
 			a.logger.Error("could not store alias", "alias", al, "error", err)
 			continue
 		}
