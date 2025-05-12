@@ -50,8 +50,9 @@ func RegisterBase(b *boiler.Boiler) {
 	if *conf.Storage.Enabled {
 		boiler.MustRegister(b, RegisterStorage)
 	}
+	boiler.MustRegisterDeferred(b, RegisterAlias)
 	boiler.MustRegisterDeferred(b, RegisterUrls)
-	boiler.MustRegisterDeferred(b, RegisterGenrator)
+	boiler.MustRegisterDeferred(b, RegisterGenerator)
 	if *conf.Queue.Enabled {
 		boiler.MustRegister(b, RegisterQueue)
 	}
@@ -130,9 +131,19 @@ func RegisterUrls(b *boiler.Boiler) (urls.Urls, error) {
 	if err != nil {
 		return nil, err
 	}
+	db, err := boiler.Resolve[*sql.DB](b)
+	if err != nil {
+		return nil, err
+	}
+	alias, err := boiler.Resolve[*urls.Alias](b)
+	if err != nil {
+		return nil, err
+	}
 
 	return urls.New(urls.ServiceOpts{
-		DB: q,
+		DB:    q,
+		Conn:  db,
+		Alias: alias,
 	}), nil
 }
 
@@ -179,11 +190,18 @@ func RegisterQueue(b *boiler.Boiler) (*queue.Publisher, error) {
 	})
 }
 
-func RegisterGenrator(b *boiler.Boiler) (*urls.AliasGenerator, error) {
-	db, err := boiler.Resolve[*queries.Queries](b)
+func RegisterAlias(b *boiler.Boiler) (*urls.Alias, error) {
+	q, err := boiler.Resolve[*queries.Queries](b)
 	if err != nil {
 		return nil, err
 	}
+
+	return urls.NewAlias(urls.AliasOpts{
+		DB: q,
+	}), nil
+}
+
+func RegisterGenerator(b *boiler.Boiler) (*urls.AliasGenerator, error) {
 	met, err := boiler.Resolve[*metrics.Metrics](b)
 	if err != nil {
 		return nil, err
@@ -192,11 +210,16 @@ func RegisterGenrator(b *boiler.Boiler) (*urls.AliasGenerator, error) {
 	if err != nil {
 		return nil, err
 	}
+	alias, err := boiler.Resolve[*urls.Alias](b)
+	if err != nil {
+		return nil, err
+	}
 
 	gen := urls.NewAliasGenerator(urls.AliasGeneratorOpts{
-		DB:         db,
+		Alias:      alias,
 		BufferSize: conf.Generator.BufferSize,
 		Interval:   conf.Generator.Interval,
+		Length:     conf.Generator.Length,
 		Registry:   met.Registry,
 	})
 

@@ -45,9 +45,10 @@ func TestItCreatesAUrl(t *testing.T) {
 	_, err = svc.Get(ctx, resp.ID)
 	require.ErrorIs(t, err, sql.ErrNoRows)
 
+	t.Log("running queue")
 	test.RunQueues(t, b, ctx)
 
-	time.Sleep(time.Second)
+	time.Sleep(time.Second * 2)
 
 	url, err := svc.Get(ctx, resp.ID)
 	require.Nil(t, err)

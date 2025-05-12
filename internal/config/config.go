@@ -178,6 +178,7 @@ type Runner struct {
 }
 
 type Generator struct {
+	Length     int           `yaml:"length"      env:"LENGTH, overwrite, default=5"`
 	BufferSize int           `yaml:"buffer_size" env:"BUFFER_SIZE, overwrite, default=100000"`
 	Interval   time.Duration `yaml:"interval"    env:"INTERVAL, overwrite, default=5s"`
 }

@@ -113,6 +113,7 @@ func (w *Worker) handler(ctx context.Context, task *asynq.Task) error {
 		trace.WithSpanKind(trace.SpanKindConsumer),
 	)
 	defer span.End()
+	slog.Debug("processing job", "task", task.Type())
 
 	labels := prometheus.Labels{"task": task.Type()}
 

@@ -22,3 +22,11 @@ func mapUrl(u *queries.Url) *Url {
 		ShortUrl: fmt.Sprintf("https://%s/%s", u.Domain, u.Alias),
 	}
 }
+
+func mapUrls(u []*queries.Url) []*Url {
+	out := []*Url{}
+	for _, url := range u {
+		out = append(out, mapUrl(url))
+	}
+	return out
+}
