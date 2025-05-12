@@ -58,3 +58,40 @@ table "aliases" {
     columns = [column.used]
   }
 }
+
+table "clicks" {
+  schema = schema.public
+
+  column "id" {
+    type = uuid
+    null = false
+  }
+
+  column "url_id" {
+    type = uuid
+    null = false
+  }
+
+  column "ip" {
+    type = text
+    null = false
+  }
+
+  column "clicked_at" {
+    type = bigint
+    null = false
+  }
+
+  primary_key {
+    columns = [column.id]
+  }
+
+  foreign_key "fk_clicks_url_id" {
+    columns     = [column.url_id]
+    ref_columns = [table.urls.column.id]
+    on_delete   = CASCADE
+  }
+  index "idx_clicks_url_id" {
+    columns = [column.url_id]
+  }
+}

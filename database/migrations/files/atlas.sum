@@ -1,6 +1,7 @@
-h1:Up4XnJ2ukl1bsF7pHa9rLMPW6tVmWxrA+sE1uZGaQ6k=
+h1:dGDqvPUSlsRu+MjThkFT09em4FJs1XIBDx5OKmPAK9c=
 20250512155138_create_urls_table.up.sql h1:sO9D5JSmgXLrhT221q82HdoRWehP060PmaoYA98F/Oo=
 20250512160407_alter_urls_add_domain.up.sql h1:1bH5lk8eIkGpOS0F6lgzU87ib7pXIvuANazVib0v5aA=
 20250512173205_create_alias_buffer.up.sql h1:UBZ+2vUFqZDC9TdVOUXvGzHGeGt3ZSPlQcP3XesQd1U=
 20250512182825_create_aliases_table.up.sql h1:N2c+a4ZTMfJy2m+NwQZyRz90iW/STj8ra7cW8MF86lU=
 20250512183309_alter_alieses_add_used_index.up.sql h1:6pdxHms9ZjMVzCpRnpElLGJncHwnqO62DSSl/bZX0pM=
+20250512214750_create_clicks_table.up.sql h1:jnxjHC2IQ8hMF3OEkF3qKuN3eNL48n270bAEjy7IxDk=

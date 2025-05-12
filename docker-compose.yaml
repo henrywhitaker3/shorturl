@@ -108,6 +108,32 @@ services:
           cpus: 1
           memory: 1024MB
 
+  click:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: ["consume", "click", "--config", "/config/shorturl.yaml"]
+    ports:
+      - 8565:8765
+      - 8566:8766
+      - 8567:8767
+    volumes:
+      - ./shorturl.yaml:/config/shorturl.yaml:ro
+    environment:
+      - REDIS_ADDR=redis:6379
+      - DB_URL=postgres://api:password@postgres:5432/api?sslmode=disable
+    networks:
+      - shorturl
+    depends_on:
+      - postgres
+      - minio
+      - redis
+    deploy:
+      resources:
+        limits:
+          cpus: 1
+          memory: 1024MB
+
   queueui:
     image: hibiken/asynqmon
     platform: linux/amd64

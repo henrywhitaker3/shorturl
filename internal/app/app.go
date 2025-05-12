@@ -52,6 +52,7 @@ func RegisterBase(b *boiler.Boiler) {
 	}
 	boiler.MustRegisterDeferred(b, RegisterAlias)
 	boiler.MustRegisterDeferred(b, RegisterUrls)
+	boiler.MustRegisterDeferred(b, RegisterClicks)
 	boiler.MustRegisterDeferred(b, RegisterGenerator)
 	if *conf.Queue.Enabled {
 		boiler.MustRegister(b, RegisterQueue)
@@ -66,6 +67,7 @@ func RegisterConsumers(b *boiler.Boiler) {
 func RegisterQueueHandlers(b *boiler.Boiler) {
 	boiler.MustRegisterNamedDefered(b, DefaultQueue, RegisterDefaultQueueWorker)
 	boiler.MustRegisterNamedDefered(b, CreateQueue, RegisterCreateQueueWorker)
+	boiler.MustRegisterNamedDefered(b, ClickQueue, RegisterClickQueueWorker)
 }
 
 func RegisterDB(b *boiler.Boiler) (*sql.DB, error) {
@@ -144,6 +146,17 @@ func RegisterUrls(b *boiler.Boiler) (urls.Urls, error) {
 		DB:    q,
 		Conn:  db,
 		Alias: alias,
+	}), nil
+}
+
+func RegisterClicks(b *boiler.Boiler) (*urls.Clicks, error) {
+	db, err := boiler.Resolve[*queries.Queries](b)
+	if err != nil {
+		return nil, err
+	}
+
+	return urls.NewClicks(urls.ClickOpts{
+		DB: db,
 	}), nil
 }
 
@@ -259,6 +272,7 @@ func RegisterStorage(b *boiler.Boiler) (objstore.Bucket, error) {
 const (
 	DefaultQueue = "queue:default"
 	CreateQueue  = "queue:create"
+	ClickQueue   = "queue:click"
 )
 
 func RegisterDefaultQueueWorker(
@@ -316,5 +330,40 @@ func RegisterCreateQueueWorker(
 		return nil, err
 	}
 	worker.RegisterHandler(queue.CreateTask, handler)
+	return worker, nil
+}
+
+func RegisterClickQueueWorker(
+	b *boiler.Boiler,
+) (*queue.Worker, error) {
+	conf, err := boiler.Resolve[*config.Config](b)
+	if err != nil {
+		return nil, err
+	}
+	conc := 0
+	if conf.Queue.Concurrency != nil {
+		conc = *conf.Queue.Concurrency
+	}
+
+	svc, err := boiler.Resolve[*urls.Clicks](b)
+	if err != nil {
+		return nil, err
+	}
+	handler := urls.NewClickJobHandler(svc)
+
+	worker, err := queue.NewWorker(b.Context(), queue.ServerOpts{
+		Redis: queue.RedisOpts{
+			Addr:        conf.Redis.Addr,
+			Password:    conf.Redis.Password,
+			DB:          conf.Queue.DB,
+			OtelEnabled: *conf.Telemetry.Tracing.Enabled,
+		},
+		Queues:      []queue.Queue{queue.Click},
+		Concurrency: conc,
+	})
+	if err != nil {
+		return nil, err
+	}
+	worker.RegisterHandler(queue.ClickTask, handler)
 	return worker, nil
 }

@@ -13,6 +13,13 @@ type Alias struct {
 	Used  bool
 }
 
+type Click struct {
+	ID        uuid.UUID
+	UrlID     uuid.UUID
+	Ip        string
+	ClickedAt int64
+}
+
 type Url struct {
 	ID     uuid.UUID
 	Alias  string

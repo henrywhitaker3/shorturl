@@ -2,22 +2,27 @@ package urls
 
 import (
 	"net/http"
+	"time"
 
 	"github.com/henrywhitaker3/boiler"
 	"github.com/henrywhitaker3/shorturl/internal/http/common"
 	"github.com/henrywhitaker3/shorturl/internal/http/middleware"
+	"github.com/henrywhitaker3/shorturl/internal/logger"
+	"github.com/henrywhitaker3/shorturl/internal/queue"
 	"github.com/henrywhitaker3/shorturl/internal/tracing"
 	"github.com/henrywhitaker3/shorturl/internal/urls"
 	"github.com/labstack/echo/v4"
 )
 
 type VisitHandler struct {
-	urls urls.Urls
+	urls  urls.Urls
+	queue *queue.Publisher
 }
 
 func NewVisitHandler(b *boiler.Boiler) *VisitHandler {
 	return &VisitHandler{
-		urls: boiler.MustResolve[urls.Urls](b),
+		urls:  boiler.MustResolve[urls.Urls](b),
+		queue: boiler.MustResolve[*queue.Publisher](b),
 	}
 }
 
@@ -42,6 +47,14 @@ func (v *VisitHandler) Handler() echo.HandlerFunc {
 		url, err := v.urls.GetAlias(ctx, req.Alias)
 		if err != nil {
 			return common.Stack(err)
+		}
+
+		if err := v.queue.Push(ctx, queue.ClickTask, queue.ClickJob{
+			ID:   url.ID,
+			IP:   c.RealIP(),
+			Time: time.Now(),
+		}); err != nil {
+			logger.Logger(ctx).Error("failed to queue click", "error", err)
 		}
 
 		c.Response().

@@ -13,12 +13,14 @@ import (
 )
 
 type GetHandler struct {
-	urls urls.Urls
+	urls   urls.Urls
+	clicks *urls.Clicks
 }
 
 func NewGetHandler(b *boiler.Boiler) *GetHandler {
 	return &GetHandler{
-		urls: boiler.MustResolve[urls.Urls](b),
+		urls:   boiler.MustResolve[urls.Urls](b),
+		clicks: boiler.MustResolve[*urls.Clicks](b),
 	}
 }
 
@@ -28,6 +30,11 @@ type GetRequest struct {
 
 func (g GetRequest) Validate() error {
 	return nil
+}
+
+type GetResponse struct {
+	Url   *urls.Url   `json:"url"`
+	Stats *urls.Stats `json:"stats"`
 }
 
 func (g *GetHandler) Handler() echo.HandlerFunc {
@@ -45,7 +52,15 @@ func (g *GetHandler) Handler() echo.HandlerFunc {
 			return common.Stack(err)
 		}
 
-		return c.JSON(http.StatusOK, url)
+		stats, err := g.clicks.Stats(ctx, url.ID)
+		if err != nil {
+			return common.Stack(err)
+		}
+
+		return c.JSON(http.StatusOK, GetResponse{
+			Url:   url,
+			Stats: stats,
+		})
 	}
 }
 
