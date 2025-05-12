@@ -65,3 +65,12 @@ tasks:
     silent: true
     cmds:
       - go run main.go secrets key
+
+  benchmark:
+    desc: Run the k6 benchmark
+    requires:
+      vars:
+        - alias
+    dir: k6
+    cmds:
+      - k6 run benchmark.js -e URL_ALIAS={{ .alias }}
