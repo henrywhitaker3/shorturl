@@ -1,0 +1,15 @@
+meta {
+  name: Get url
+  type: http
+  seq: 5
+}
+
+get {
+  url: {{url}}/{{id}}
+  body: none
+  auth: inherit
+}
+
+vars:pre-request {
+  id: 0196c601-a7cc-71f9-a533-87a4ae11cfe2
+}

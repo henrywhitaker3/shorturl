@@ -60,6 +60,7 @@ func New(b *boiler.Boiler) *Http {
 	h.e.HTTPErrorHandler = h.handleError
 
 	h.Register(urls.NewCreateHandler(b))
+	h.Register(urls.NewGetHandler(b))
 	h.Register(urls.NewVisitHandler(b))
 
 	return h
