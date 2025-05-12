@@ -13,7 +13,7 @@ func Setup(level slog.Level, outputs ...io.Writer) {
 	}
 	handler := slog.NewJSONHandler(outputs[0], &slog.HandlerOptions{
 		Level:     level,
-		AddSource: true,
+		AddSource: false,
 	})
 	logger := slog.New(handler)
 	slog.SetDefault(logger)

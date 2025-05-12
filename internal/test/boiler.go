@@ -111,6 +111,8 @@ func newBoiler(t *testing.T) *boiler.Boiler {
 		"insecure":   true,
 	}
 
+	conf.Generator.BufferSize = 100
+
 	t.Log("spinning up minio")
 	minio(t, &conf.Storage, ctx)
 

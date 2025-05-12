@@ -35,21 +35,39 @@ WITH alias AS (
     LIMIT
         1 FOR
     UPDATE
-)
-INSERT INTO
-    urls (id, alias, url, domain)
-VALUES
-    (
-        $1,
+),
+inserted AS (
+    INSERT INTO
+        urls (id, alias, url, domain)
+    VALUES
         (
+            $1,
+            (
+                SELECT
+                    alias
+                FROM
+                    alias
+                LIMIT
+                    1
+            ), $2, $3
+        ) RETURNING id, alias, url, domain
+), deleted AS (
+    DELETE FROM
+        alias_buffer
+    WHERE
+        alias = (
             SELECT
                 alias
             FROM
                 alias
             LIMIT
                 1
-        ), $2, $3
-    ) RETURNING id, alias, url, domain
+        )
+)
+SELECT
+    id, alias, url, domain
+FROM
+    inserted
 `
 
 type CreateUrlParams struct {
@@ -58,9 +76,16 @@ type CreateUrlParams struct {
 	Domain string
 }
 
-func (q *Queries) CreateUrl(ctx context.Context, arg CreateUrlParams) (*Url, error) {
+type CreateUrlRow struct {
+	ID     uuid.UUID
+	Alias  string
+	Url    string
+	Domain string
+}
+
+func (q *Queries) CreateUrl(ctx context.Context, arg CreateUrlParams) (*CreateUrlRow, error) {
 	row := q.db.QueryRowContext(ctx, createUrl, arg.ID, arg.Url, arg.Domain)
-	var i Url
+	var i CreateUrlRow
 	err := row.Scan(
 		&i.ID,
 		&i.Alias,

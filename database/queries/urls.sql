@@ -7,21 +7,39 @@ WITH alias AS (
     LIMIT
         1 FOR
     UPDATE
-)
-INSERT INTO
-    urls (id, alias, url, domain)
-VALUES
-    (
-        $1,
+),
+inserted AS (
+    INSERT INTO
+        urls (id, alias, url, domain)
+    VALUES
         (
+            $1,
+            (
+                SELECT
+                    alias
+                FROM
+                    alias
+                LIMIT
+                    1
+            ), $2, $3
+        ) RETURNING *
+), deleted AS (
+    DELETE FROM
+        alias_buffer
+    WHERE
+        alias = (
             SELECT
                 alias
             FROM
                 alias
             LIMIT
                 1
-        ), $2, $3
-    ) RETURNING *;
+        )
+)
+SELECT
+    *
+FROM
+    inserted;
 
 -- name: GetUrl :one
 SELECT

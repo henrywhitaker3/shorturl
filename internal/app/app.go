@@ -51,6 +51,7 @@ func RegisterBase(b *boiler.Boiler) {
 		boiler.MustRegister(b, RegisterStorage)
 	}
 	boiler.MustRegisterDeferred(b, RegisterUrls)
+	boiler.MustRegisterDeferred(b, RegisterGenrator)
 	if *conf.Queue.Enabled {
 		boiler.MustRegister(b, RegisterQueue)
 	}
@@ -178,16 +179,7 @@ func RegisterQueue(b *boiler.Boiler) (*queue.Publisher, error) {
 	})
 }
 
-func RegisterRunner(b *boiler.Boiler) (*workers.Runner, error) {
-	redis, err := boiler.Resolve[rueidis.Client](b)
-	if err != nil {
-		return nil, err
-	}
-	runner, err := workers.NewRunner(b.Context(), redis)
-	if err != nil {
-		return nil, fmt.Errorf("create runner: %w", err)
-	}
-
+func RegisterGenrator(b *boiler.Boiler) (*urls.AliasGenerator, error) {
 	db, err := boiler.Resolve[*queries.Queries](b)
 	if err != nil {
 		return nil, err
@@ -207,6 +199,25 @@ func RegisterRunner(b *boiler.Boiler) (*workers.Runner, error) {
 		Interval:   conf.Generator.Interval,
 		Registry:   met.Registry,
 	})
+
+	return gen, nil
+}
+
+func RegisterRunner(b *boiler.Boiler) (*workers.Runner, error) {
+	redis, err := boiler.Resolve[rueidis.Client](b)
+	if err != nil {
+		return nil, err
+	}
+	runner, err := workers.NewRunner(b.Context(), redis)
+	if err != nil {
+		return nil, fmt.Errorf("create runner: %w", err)
+	}
+
+	gen, err := boiler.Resolve[*urls.AliasGenerator](b)
+	if err != nil {
+		return nil, err
+	}
+
 	if err := runner.Register(gen); err != nil {
 		return nil, fmt.Errorf("failed to register generator worker: %w", err)
 	}

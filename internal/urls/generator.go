@@ -144,8 +144,8 @@ func (a *AliasGenerator) Run(ctx context.Context) error {
 	}
 
 	toGenerate := a.size - int(inBuffer)
-	if inBuffer == 0 {
-		a.logger.Debug("buffer already full")
+	if toGenerate == 0 {
+		a.logger.Debug("buffer already full", "size", inBuffer)
 		return nil
 	}
 
@@ -155,7 +155,7 @@ func (a *AliasGenerator) Run(ctx context.Context) error {
 		alias := generateAlias(length)
 		inserted, err := a.db.InsertAliasBuffer(ctx, alias)
 		if err != nil {
-			return fmt.Errorf("insert alis into buffer: %w", err)
+			return fmt.Errorf("insert alias into buffer: %w", err)
 		}
 		if inserted != 1 {
 			a.logger.Debug("got a conflict inserting into buffer", "alias", alias)

@@ -38,7 +38,12 @@ func (s *Service) Create(ctx context.Context, params CreateParams) (*Url, error)
 		return nil, fmt.Errorf("store url: %w", err)
 	}
 
-	return mapUrl(url), nil
+	return mapUrl(&queries.Url{
+		ID:     url.ID,
+		Alias:  url.Alias,
+		Url:    url.Url,
+		Domain: url.Domain,
+	}), nil
 }
 
 func (s *Service) Get(ctx context.Context, id uuid.UUID) (*Url, error) {

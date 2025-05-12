@@ -18,7 +18,7 @@ import (
 func TestItCreatesAUrl(t *testing.T) {
 	b := test.Boiler(t)
 
-	ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
+	ctx, cancel := context.WithTimeout(context.Background(), time.Minute)
 	defer cancel()
 
 	rec := test.Post(
@@ -36,6 +36,9 @@ func TestItCreatesAUrl(t *testing.T) {
 	resp := urls.CreateResponse{}
 	require.Nil(t, json.Unmarshal(rec.Body.Bytes(), &resp))
 
+	// Fill up the buffer
+	require.Nil(t, boiler.MustResolve[*iurls.AliasGenerator](b).Run(ctx))
+
 	svc, err := boiler.Resolve[iurls.Urls](b)
 	require.Nil(t, err)
 
@@ -46,6 +49,7 @@ func TestItCreatesAUrl(t *testing.T) {
 
 	time.Sleep(time.Second)
 
-	_, err = svc.Get(ctx, resp.ID)
+	url, err := svc.Get(ctx, resp.ID)
 	require.Nil(t, err)
+	t.Log(url)
 }
