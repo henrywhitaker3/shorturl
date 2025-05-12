@@ -92,7 +92,7 @@ func NewRunner(ctx context.Context, redis rueidis.Client) (*Runner, error) {
 }
 
 func (r *Runner) Register(w Worker) error {
-	logger := logger.Logger(r.ctx)
+	logger := logger.Logger(r.ctx).With("subsystem", "runner")
 
 	logger.Info("registering worker", "name", w.Name())
 
@@ -109,8 +109,8 @@ func (r *Runner) Register(w Worker) error {
 	_, err := r.sched.NewJob(
 		at,
 		gocron.NewTask(
-			func(ctx context.Context) {
-				ctx, cancel := context.WithTimeout(ctx, w.Timeout())
+			func() {
+				ctx, cancel := context.WithTimeout(context.Background(), w.Timeout())
 				defer cancel()
 				metrics.WorkerExecutions.WithLabelValues(w.Name()).Inc()
 				if err := w.Run(ctx); err != nil {
@@ -118,7 +118,6 @@ func (r *Runner) Register(w Worker) error {
 					metrics.WorkerExecutionErrors.WithLabelValues(w.Name()).Inc()
 				}
 			},
-			r.ctx,
 		),
 		gocron.WithName(w.Name()),
 	)

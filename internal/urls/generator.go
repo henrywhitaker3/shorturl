@@ -112,8 +112,12 @@ func (a *AliasGenerator) generateAliases(ctx context.Context) ([]string, error) 
 		return nil, err
 	}
 
+	if free >= a.size {
+		return []string{}, nil
+	}
+
 	toGenerate := a.size - free
-	if toGenerate == 0 {
+	if toGenerate < 1 {
 		return []string{}, nil
 	}
 
