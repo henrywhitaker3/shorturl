@@ -4,8 +4,8 @@ import (
 	"fmt"
 
 	"github.com/henrywhitaker3/boiler"
-	"github.com/henrywhitaker3/go-template/internal/app"
-	"github.com/henrywhitaker3/go-template/internal/http"
+	"github.com/henrywhitaker3/shorturl/internal/app"
+	"github.com/henrywhitaker3/shorturl/internal/http"
 	"github.com/spf13/cobra"
 )
 

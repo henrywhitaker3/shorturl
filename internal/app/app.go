@@ -2,21 +2,22 @@ package app
 
 import (
 	"database/sql"
+	"fmt"
 
 	"github.com/henrywhitaker3/boiler"
 	gocache "github.com/henrywhitaker3/go-cache"
-	"github.com/henrywhitaker3/go-template/database/queries"
-	"github.com/henrywhitaker3/go-template/internal/config"
-	"github.com/henrywhitaker3/go-template/internal/crypto"
-	ohttp "github.com/henrywhitaker3/go-template/internal/http"
-	"github.com/henrywhitaker3/go-template/internal/metrics"
-	"github.com/henrywhitaker3/go-template/internal/postgres"
-	"github.com/henrywhitaker3/go-template/internal/probes"
-	"github.com/henrywhitaker3/go-template/internal/queue"
-	"github.com/henrywhitaker3/go-template/internal/redis"
-	"github.com/henrywhitaker3/go-template/internal/storage"
-	"github.com/henrywhitaker3/go-template/internal/urls"
-	"github.com/henrywhitaker3/go-template/internal/workers"
+	"github.com/henrywhitaker3/shorturl/database/queries"
+	"github.com/henrywhitaker3/shorturl/internal/config"
+	"github.com/henrywhitaker3/shorturl/internal/crypto"
+	ohttp "github.com/henrywhitaker3/shorturl/internal/http"
+	"github.com/henrywhitaker3/shorturl/internal/metrics"
+	"github.com/henrywhitaker3/shorturl/internal/postgres"
+	"github.com/henrywhitaker3/shorturl/internal/probes"
+	"github.com/henrywhitaker3/shorturl/internal/queue"
+	"github.com/henrywhitaker3/shorturl/internal/redis"
+	"github.com/henrywhitaker3/shorturl/internal/storage"
+	"github.com/henrywhitaker3/shorturl/internal/urls"
+	"github.com/henrywhitaker3/shorturl/internal/workers"
 	"github.com/redis/rueidis"
 	"github.com/thanos-io/objstore"
 )
@@ -57,6 +58,10 @@ func RegisterBase(b *boiler.Boiler) {
 
 func RegisterConsumers(b *boiler.Boiler) {
 	RegisterBase(b)
+	RegisterQueueHandlers(b)
+}
+
+func RegisterQueueHandlers(b *boiler.Boiler) {
 	boiler.MustRegisterNamedDefered(b, DefaultQueue, RegisterDefaultQueueWorker)
 	boiler.MustRegisterNamedDefered(b, CreateQueue, RegisterCreateQueueWorker)
 }
@@ -124,11 +129,9 @@ func RegisterUrls(b *boiler.Boiler) (urls.Urls, error) {
 	if err != nil {
 		return nil, err
 	}
+
 	return urls.New(urls.ServiceOpts{
 		DB: q,
-		Generator: urls.NewAliasGenerator(urls.AliasGeneratorOpts{
-			DB: q,
-		}),
 	}), nil
 }
 
@@ -180,7 +183,35 @@ func RegisterRunner(b *boiler.Boiler) (*workers.Runner, error) {
 	if err != nil {
 		return nil, err
 	}
-	return workers.NewRunner(b.Context(), redis)
+	runner, err := workers.NewRunner(b.Context(), redis)
+	if err != nil {
+		return nil, fmt.Errorf("create runner: %w", err)
+	}
+
+	db, err := boiler.Resolve[*queries.Queries](b)
+	if err != nil {
+		return nil, err
+	}
+	met, err := boiler.Resolve[*metrics.Metrics](b)
+	if err != nil {
+		return nil, err
+	}
+	conf, err := boiler.Resolve[*config.Config](b)
+	if err != nil {
+		return nil, err
+	}
+
+	gen := urls.NewAliasGenerator(urls.AliasGeneratorOpts{
+		DB:         db,
+		BufferSize: conf.Generator.BufferSize,
+		Interval:   conf.Generator.Interval,
+		Registry:   met.Registry,
+	})
+	if err := runner.Register(gen); err != nil {
+		return nil, fmt.Errorf("failed to register generator worker: %w", err)
+	}
+
+	return runner, nil
 }
 
 func RegisterStorage(b *boiler.Boiler) (objstore.Bucket, error) {

@@ -162,11 +162,6 @@ type Storage struct {
 	Config  map[string]any `yaml:"config"`
 }
 
-type Jwt struct {
-	Enabled *bool  `yaml:"enabled" env:"ENABLED, overwrite, default=true"`
-	Secret  string `yaml:"secret"  env:"SECRET, overwrite"`
-}
-
 type Encryption struct {
 	Enabled *bool  `yaml:"enabled" env:"ENABLED, overwrite, default=true"`
 	Secret  string `yaml:"secret"  env:"SECRET, overwrite"`
@@ -182,6 +177,11 @@ type Runner struct {
 	Enabled *bool `yaml:"enabled" env:"ENABLED, overwrite, default=true"`
 }
 
+type Generator struct {
+	BufferSize int           `yaml:"buffer_size" env:"BUFFER_SIZE, overwrite, default=100000"`
+	Interval   time.Duration `yaml:"interval"    env:"INTERVAL, overwrite, default=5s"`
+}
+
 type Config struct {
 	Name        string `yaml:"name"        env:"APP_NAME"`
 	Environment string `yaml:"environment" env:"APP_ENV, overwrite, default=dev"`
@@ -189,7 +189,6 @@ type Config struct {
 	Storage Storage `yaml:"storage" env:", prefix=STORAGE_"`
 
 	Encryption Encryption `yaml:"encryption" env:", prefix=ENCRYPTION"`
-	Jwt        Jwt        `yaml:"jwt"        env:", prefix=JWT_"`
 
 	LogLevel LogLevel `yaml:"log_level" env:"LOG_LEVEL, overwrite, default=error"`
 	Database Postgres `yaml:"database"  env:", prefix=DB_"`
@@ -202,6 +201,8 @@ type Config struct {
 
 	Queue  Queue  `yaml:"queue"  env:", prefix=QUEUE_"`
 	Runner Runner `yaml:"runner" env:", prefix=RUNNER_"`
+
+	Generator Generator `yaml:"generator" env:", prefix=GENERATOR_"`
 }
 
 func Load(path string) (*Config, error) {
@@ -236,9 +237,6 @@ func (c *Config) validate() error {
 	}
 	if c.Name == "" {
 		return errors.New("name must be set")
-	}
-	if *c.Jwt.Enabled && c.Jwt.Secret == "" {
-		return errors.New("jwt secret must be set")
 	}
 	if *c.Encryption.Enabled && c.Encryption.Secret == "" {
 		return errors.New("encryption secret must be set")

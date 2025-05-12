@@ -7,9 +7,9 @@ import (
 	"runtime"
 	"time"
 
-	"github.com/henrywhitaker3/go-template/internal/logger"
-	"github.com/henrywhitaker3/go-template/internal/metrics"
-	"github.com/henrywhitaker3/go-template/internal/tracing"
+	"github.com/henrywhitaker3/shorturl/internal/logger"
+	"github.com/henrywhitaker3/shorturl/internal/metrics"
+	"github.com/henrywhitaker3/shorturl/internal/tracing"
 	"github.com/hibiken/asynq"
 	ametrics "github.com/hibiken/asynq/x/metrics"
 	"github.com/prometheus/client_golang/prometheus"

@@ -5,11 +5,11 @@ import (
 	"net/http"
 
 	"github.com/henrywhitaker3/boiler"
-	"github.com/henrywhitaker3/go-template/internal/http/common"
-	"github.com/henrywhitaker3/go-template/internal/http/middleware"
-	"github.com/henrywhitaker3/go-template/internal/queue"
-	"github.com/henrywhitaker3/go-template/internal/tracing"
-	"github.com/henrywhitaker3/go-template/internal/uuid"
+	"github.com/henrywhitaker3/shorturl/internal/http/common"
+	"github.com/henrywhitaker3/shorturl/internal/http/middleware"
+	"github.com/henrywhitaker3/shorturl/internal/queue"
+	"github.com/henrywhitaker3/shorturl/internal/tracing"
+	"github.com/henrywhitaker3/shorturl/internal/uuid"
 	"github.com/labstack/echo/v4"
 )
 

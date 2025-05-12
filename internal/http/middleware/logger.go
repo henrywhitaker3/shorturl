@@ -4,9 +4,9 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/henrywhitaker3/go-template/internal/http/common"
-	"github.com/henrywhitaker3/go-template/internal/logger"
-	"github.com/henrywhitaker3/go-template/internal/tracing"
+	"github.com/henrywhitaker3/shorturl/internal/http/common"
+	"github.com/henrywhitaker3/shorturl/internal/logger"
+	"github.com/henrywhitaker3/shorturl/internal/tracing"
 	"github.com/labstack/echo/v4"
 )
 

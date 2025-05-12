@@ -9,9 +9,9 @@ import (
 	"time"
 
 	"github.com/henrywhitaker3/boiler"
-	"github.com/henrywhitaker3/go-template/internal/http/handlers/urls"
-	"github.com/henrywhitaker3/go-template/internal/test"
-	iurls "github.com/henrywhitaker3/go-template/internal/urls"
+	"github.com/henrywhitaker3/shorturl/internal/http/handlers/urls"
+	"github.com/henrywhitaker3/shorturl/internal/test"
+	iurls "github.com/henrywhitaker3/shorturl/internal/urls"
 	"github.com/stretchr/testify/require"
 )
 
@@ -25,11 +25,13 @@ func TestItCreatesAUrl(t *testing.T) {
 		t,
 		b,
 		"/urls",
-		urls.CreateRequest{},
+		urls.CreateRequest{
+			Url: "https://synthetigo.com",
+		},
 		"",
 	)
 
-	require.Equal(t, http.StatusOK, rec.Code)
+	require.Equal(t, http.StatusAccepted, rec.Code)
 
 	resp := urls.CreateResponse{}
 	require.Nil(t, json.Unmarshal(rec.Body.Bytes(), &resp))
@@ -39,4 +41,11 @@ func TestItCreatesAUrl(t *testing.T) {
 
 	_, err = svc.Get(ctx, resp.ID)
 	require.ErrorIs(t, err, sql.ErrNoRows)
+
+	test.RunQueues(t, b, ctx)
+
+	time.Sleep(time.Second)
+
+	_, err = svc.Get(ctx, resp.ID)
+	require.Nil(t, err)
 }

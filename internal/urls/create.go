@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/henrywhitaker3/go-template/internal/queue"
+	"github.com/henrywhitaker3/shorturl/internal/queue"
 	"github.com/hibiken/asynq"
 )
 

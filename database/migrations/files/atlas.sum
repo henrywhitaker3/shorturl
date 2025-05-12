@@ -1,3 +1,4 @@
-h1:8MJ4GqPHcckD9vqXBbhNFX6IhueS/6VEpfToPtR4qIU=
+h1:GIXBLDWNwVCkpfcWSxfEDjtx4qeJ0307wWoDzaTO1Jk=
 20250512155138_create_urls_table.up.sql h1:sO9D5JSmgXLrhT221q82HdoRWehP060PmaoYA98F/Oo=
 20250512160407_alter_urls_add_domain.up.sql h1:1bH5lk8eIkGpOS0F6lgzU87ib7pXIvuANazVib0v5aA=
+20250512173205_create_alias_buffer.up.sql h1:UBZ+2vUFqZDC9TdVOUXvGzHGeGt3ZSPlQcP3XesQd1U=

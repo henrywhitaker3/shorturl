@@ -4,9 +4,9 @@ import (
 	"strconv"
 
 	"github.com/henrywhitaker3/boiler"
-	"github.com/henrywhitaker3/go-template/database/seed"
-	"github.com/henrywhitaker3/go-template/internal/app"
-	"github.com/henrywhitaker3/go-template/internal/config"
+	"github.com/henrywhitaker3/shorturl/database/seed"
+	"github.com/henrywhitaker3/shorturl/internal/app"
+	"github.com/henrywhitaker3/shorturl/internal/config"
 	"github.com/spf13/cobra"
 )
 

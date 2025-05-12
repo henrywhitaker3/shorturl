@@ -31,3 +31,16 @@ table "urls" {
     unique  = true
   }
 }
+
+table "alias_buffer" {
+  schema = schema.public
+
+  column "alias" {
+    type = text
+    null = false
+  }
+
+  primary_key {
+    columns = [column.alias]
+  }
+}

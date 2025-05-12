@@ -1,4 +1,4 @@
-module github.com/henrywhitaker3/go-template
+module github.com/henrywhitaker3/shorturl
 
 go 1.24.2
 

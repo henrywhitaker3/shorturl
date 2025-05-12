@@ -3,7 +3,7 @@ name: Release
 on:
   push:
     tags:
-      - 'v*'
+      - "v*"
 
 jobs:
   chart:
@@ -52,14 +52,14 @@ jobs:
       - name: Push chart
         uses: appany/helm-oci-chart-releaser@v0.4.2
         with:
-          name: go-template-helm
+          name: shorturl-helm
           repository: henrywhitaker3
           tag: "v${{ env.CHART_VERSION }}"
           path: chart
           registry: ghcr.io
           registry_username: ${{ github.actor }}
           registry_password: ${{ secrets.GITHUB_TOKEN }}
-          update_dependencies: 'true'
+          update_dependencies: "true"
 
   build:
     runs-on: ubuntu-latest
@@ -80,7 +80,7 @@ jobs:
         with:
           push: true
           tags: |
-            ghcr.io/henrywhitaker3/go-template:latest
-            ghcr.io/henrywhitaker3/go-template:${{ github.ref_name }}
+            ghcr.io/henrywhitaker3/shorturl:latest
+            ghcr.io/henrywhitaker3/shorturl:${{ github.ref_name }}
           build-args: |
             VERSION=${{ github.ref_name }}

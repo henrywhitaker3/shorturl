@@ -2,7 +2,7 @@ package migrate
 
 import (
 	"github.com/henrywhitaker3/boiler"
-	"github.com/henrywhitaker3/go-template/internal/app"
+	"github.com/henrywhitaker3/shorturl/internal/app"
 	"github.com/spf13/cobra"
 )
 

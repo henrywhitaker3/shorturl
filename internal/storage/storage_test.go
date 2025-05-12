@@ -10,9 +10,9 @@ import (
 	"time"
 
 	"github.com/henrywhitaker3/boiler"
-	"github.com/henrywhitaker3/go-template/internal/config"
-	"github.com/henrywhitaker3/go-template/internal/storage"
-	"github.com/henrywhitaker3/go-template/internal/test"
+	"github.com/henrywhitaker3/shorturl/internal/config"
+	"github.com/henrywhitaker3/shorturl/internal/storage"
+	"github.com/henrywhitaker3/shorturl/internal/test"
 	"github.com/stretchr/testify/require"
 	"github.com/thanos-io/objstore"
 )

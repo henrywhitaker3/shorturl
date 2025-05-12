@@ -14,11 +14,11 @@ import (
 	"github.com/getsentry/sentry-go"
 	"github.com/grafana/pyroscope-go"
 	"github.com/henrywhitaker3/boiler"
-	"github.com/henrywhitaker3/go-template/cmd/root"
-	"github.com/henrywhitaker3/go-template/cmd/secrets"
-	"github.com/henrywhitaker3/go-template/internal/config"
-	"github.com/henrywhitaker3/go-template/internal/logger"
-	"github.com/henrywhitaker3/go-template/internal/tracing"
+	"github.com/henrywhitaker3/shorturl/cmd/root"
+	"github.com/henrywhitaker3/shorturl/cmd/secrets"
+	"github.com/henrywhitaker3/shorturl/internal/config"
+	"github.com/henrywhitaker3/shorturl/internal/logger"
+	"github.com/henrywhitaker3/shorturl/internal/tracing"
 	"go.uber.org/automaxprocs/maxprocs"
 )
 
@@ -169,5 +169,5 @@ func getConfigPath() string {
 			return os.Args[i+1]
 		}
 	}
-	return "go-template.yaml"
+	return "shorturl.yaml"
 }

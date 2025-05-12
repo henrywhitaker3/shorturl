@@ -10,10 +10,10 @@ import (
 
 	"github.com/docker/go-connections/nat"
 	"github.com/henrywhitaker3/boiler"
-	"github.com/henrywhitaker3/go-template/internal/app"
-	"github.com/henrywhitaker3/go-template/internal/config"
-	"github.com/henrywhitaker3/go-template/internal/logger"
-	pg "github.com/henrywhitaker3/go-template/internal/postgres"
+	"github.com/henrywhitaker3/shorturl/internal/app"
+	"github.com/henrywhitaker3/shorturl/internal/config"
+	"github.com/henrywhitaker3/shorturl/internal/logger"
+	pg "github.com/henrywhitaker3/shorturl/internal/postgres"
 	"github.com/stretchr/testify/require"
 	"github.com/testcontainers/testcontainers-go"
 	"github.com/testcontainers/testcontainers-go/log"
@@ -69,7 +69,7 @@ func newBoiler(t *testing.T) *boiler.Boiler {
 	)
 	require.Nil(t, err)
 
-	conf, err := config.Load(fmt.Sprintf("%s/go-template.example.yaml", root))
+	conf, err := config.Load(fmt.Sprintf("%s/shorturl.example.yaml", root))
 	require.Nil(t, err)
 	conn, err := pgCont.ConnectionString(context.Background())
 	require.Nil(t, err)
@@ -119,6 +119,7 @@ func newBoiler(t *testing.T) *boiler.Boiler {
 	}))
 
 	app.RegisterServe(b)
+	app.RegisterQueueHandlers(b)
 
 	t.Log("bootstrapping boiler")
 	require.Nil(t, b.Bootstrap())

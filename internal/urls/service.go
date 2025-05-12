@@ -4,24 +4,21 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/henrywhitaker3/go-template/database/queries"
-	"github.com/henrywhitaker3/go-template/internal/uuid"
+	"github.com/henrywhitaker3/shorturl/database/queries"
+	"github.com/henrywhitaker3/shorturl/internal/uuid"
 )
 
 type Service struct {
-	db        *queries.Queries
-	generator Generator
+	db *queries.Queries
 }
 
 type ServiceOpts struct {
-	DB        *queries.Queries
-	Generator Generator
+	DB *queries.Queries
 }
 
 func New(opts ServiceOpts) *Service {
 	return &Service{
-		db:        opts.DB,
-		generator: opts.Generator,
+		db: opts.DB,
 	}
 }
 
@@ -32,14 +29,8 @@ type CreateParams struct {
 }
 
 func (s *Service) Create(ctx context.Context, params CreateParams) (*Url, error) {
-	alias, err := s.generator.Generate()
-	if err != nil {
-		return nil, fmt.Errorf("generate alias: %w", err)
-	}
-
 	url, err := s.db.CreateUrl(ctx, queries.CreateUrlParams{
 		ID:     params.ID.UUID(),
-		Alias:  alias,
 		Url:    params.Url,
 		Domain: params.Domain,
 	})

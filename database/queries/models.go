@@ -8,6 +8,10 @@ import (
 	"github.com/google/uuid"
 )
 
+type AliasBuffer struct {
+	Alias string
+}
+
 type Url struct {
 	ID     uuid.UUID
 	Alias  string

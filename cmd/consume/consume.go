@@ -5,10 +5,10 @@ import (
 	"fmt"
 
 	"github.com/henrywhitaker3/boiler"
-	"github.com/henrywhitaker3/go-template/internal/app"
-	"github.com/henrywhitaker3/go-template/internal/metrics"
-	"github.com/henrywhitaker3/go-template/internal/probes"
-	"github.com/henrywhitaker3/go-template/internal/queue"
+	"github.com/henrywhitaker3/shorturl/internal/app"
+	"github.com/henrywhitaker3/shorturl/internal/metrics"
+	"github.com/henrywhitaker3/shorturl/internal/probes"
+	"github.com/henrywhitaker3/shorturl/internal/queue"
 	"github.com/spf13/cobra"
 )
 

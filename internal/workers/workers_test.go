@@ -6,8 +6,8 @@ import (
 	"time"
 
 	"github.com/henrywhitaker3/boiler"
-	"github.com/henrywhitaker3/go-template/internal/test"
-	"github.com/henrywhitaker3/go-template/internal/workers"
+	"github.com/henrywhitaker3/shorturl/internal/test"
+	"github.com/henrywhitaker3/shorturl/internal/workers"
 	"github.com/redis/rueidis"
 	"github.com/stretchr/testify/require"
 )

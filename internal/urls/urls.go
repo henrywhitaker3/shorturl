@@ -3,7 +3,7 @@ package urls
 import (
 	"context"
 
-	"github.com/henrywhitaker3/go-template/internal/uuid"
+	"github.com/henrywhitaker3/shorturl/internal/uuid"
 )
 
 type Urls interface {

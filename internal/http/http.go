@@ -9,11 +9,12 @@ import (
 
 	sentryecho "github.com/getsentry/sentry-go/echo"
 	"github.com/henrywhitaker3/boiler"
-	"github.com/henrywhitaker3/go-template/internal/config"
-	"github.com/henrywhitaker3/go-template/internal/http/common"
-	"github.com/henrywhitaker3/go-template/internal/http/middleware"
-	"github.com/henrywhitaker3/go-template/internal/logger"
-	"github.com/henrywhitaker3/go-template/internal/metrics"
+	"github.com/henrywhitaker3/shorturl/internal/config"
+	"github.com/henrywhitaker3/shorturl/internal/http/common"
+	"github.com/henrywhitaker3/shorturl/internal/http/handlers/urls"
+	"github.com/henrywhitaker3/shorturl/internal/http/middleware"
+	"github.com/henrywhitaker3/shorturl/internal/logger"
+	"github.com/henrywhitaker3/shorturl/internal/metrics"
 	"github.com/jackc/pgx/v5/pgconn"
 	"github.com/labstack/echo/v4"
 	mw "github.com/labstack/echo/v4/middleware"
@@ -57,6 +58,8 @@ func New(b *boiler.Boiler) *Http {
 	}
 
 	h.e.HTTPErrorHandler = h.handleError
+
+	h.Register(urls.NewCreateHandler(b))
 
 	return h
 }

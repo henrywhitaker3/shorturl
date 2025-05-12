@@ -9,29 +9,57 @@ import (
 	"context"
 
 	"github.com/google/uuid"
+	"github.com/lib/pq"
 )
 
+const countUrls = `-- name: CountUrls :one
+SELECT
+    count(*)
+FROM
+    urls
+`
+
+func (q *Queries) CountUrls(ctx context.Context) (int64, error) {
+	row := q.db.QueryRowContext(ctx, countUrls)
+	var count int64
+	err := row.Scan(&count)
+	return count, err
+}
+
 const createUrl = `-- name: CreateUrl :one
+WITH alias AS (
+    SELECT
+        alias
+    FROM
+        alias_buffer
+    LIMIT
+        1 FOR
+    UPDATE
+)
 INSERT INTO
     urls (id, alias, url, domain)
 VALUES
-    ($1, $2, $3, $4) RETURNING id, alias, url, domain
+    (
+        $1,
+        (
+            SELECT
+                alias
+            FROM
+                alias
+            LIMIT
+                1
+        ), $2, $3
+    ) RETURNING id, alias, url, domain
 `
 
 type CreateUrlParams struct {
 	ID     uuid.UUID
-	Alias  string
 	Url    string
 	Domain string
 }
 
 func (q *Queries) CreateUrl(ctx context.Context, arg CreateUrlParams) (*Url, error) {
-	row := q.db.QueryRowContext(ctx, createUrl,
-		arg.ID,
-		arg.Alias,
-		arg.Url,
-		arg.Domain,
-	)
+	row := q.db.QueryRowContext(ctx, createUrl, arg.ID, arg.Url, arg.Domain)
 	var i Url
 	err := row.Scan(
 		&i.ID,
@@ -82,4 +110,42 @@ func (q *Queries) GetUrlByAlias(ctx context.Context, alias string) (*Url, error)
 		&i.Domain,
 	)
 	return &i, err
+}
+
+const getUrlsByAliases = `-- name: GetUrlsByAliases :many
+SELECT
+    id,
+    alias
+FROM
+    urls
+WHERE
+    alias = ANY($1 :: text [])
+`
+
+type GetUrlsByAliasesRow struct {
+	ID    uuid.UUID
+	Alias string
+}
+
+func (q *Queries) GetUrlsByAliases(ctx context.Context, aliases []string) ([]*GetUrlsByAliasesRow, error) {
+	rows, err := q.db.QueryContext(ctx, getUrlsByAliases, pq.Array(aliases))
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []*GetUrlsByAliasesRow
+	for rows.Next() {
+		var i GetUrlsByAliasesRow
+		if err := rows.Scan(&i.ID, &i.Alias); err != nil {
+			return nil, err
+		}
+		items = append(items, &i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
 }

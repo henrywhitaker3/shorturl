@@ -11,9 +11,11 @@ import (
 
 	"github.com/docker/go-connections/nat"
 	"github.com/henrywhitaker3/boiler"
-	"github.com/henrywhitaker3/go-template/internal/app"
-	"github.com/henrywhitaker3/go-template/internal/config"
-	"github.com/henrywhitaker3/go-template/internal/queue"
+	"github.com/henrywhitaker3/shorturl/internal/app"
+	"github.com/henrywhitaker3/shorturl/internal/config"
+	"github.com/henrywhitaker3/shorturl/internal/queue"
+	"github.com/henrywhitaker3/shorturl/internal/urls"
+	"github.com/henrywhitaker3/shorturl/internal/uuid"
 	"github.com/stretchr/testify/require"
 	"github.com/testcontainers/testcontainers-go"
 	"github.com/testcontainers/testcontainers-go/log"
@@ -26,10 +28,24 @@ var (
 )
 
 func init() {
-	re := regexp.MustCompile(`^(.*go-template)`)
+	re := regexp.MustCompile(`^(.*shorturl)`)
 	cwd, _ := os.Getwd()
 	rootPath := re.Find([]byte(cwd))
 	root = string(rootPath)
+}
+
+type UrlOpts struct {
+	Alias string
+}
+
+func Url(t *testing.T, b *boiler.Boiler, opts UrlOpts) *urls.Url {
+	url, err := boiler.MustResolve[urls.Urls](b).Create(context.Background(), urls.CreateParams{
+		ID:     uuid.MustOrdered(),
+		Url:    "https://example.com",
+		Domain: "localhost",
+	})
+	require.Nil(t, err)
+	return url
 }
 
 func minio(t *testing.T, conf *config.Storage, ctx context.Context) {
@@ -84,6 +100,10 @@ func RunQueues(t *testing.T, b *boiler.Boiler, ctx context.Context) {
 	def, err := boiler.ResolveNamed[*queue.Worker](b, app.DefaultQueue)
 	require.Nil(t, err)
 	go def.Consume()
+
+	create, err := boiler.ResolveNamed[*queue.Worker](b, app.CreateQueue)
+	require.Nil(t, err)
+	go create.Consume()
 	time.Sleep(time.Millisecond * 500)
 }
 

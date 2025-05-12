@@ -4,7 +4,7 @@ import (
 	"errors"
 
 	"github.com/go-kit/log"
-	"github.com/henrywhitaker3/go-template/internal/config"
+	"github.com/henrywhitaker3/shorturl/internal/config"
 	"github.com/thanos-io/objstore"
 	"github.com/thanos-io/objstore/providers/filesystem"
 	"github.com/thanos-io/objstore/providers/s3"

@@ -6,7 +6,7 @@ import (
 	"fmt"
 
 	"github.com/henrywhitaker3/boiler"
-	"github.com/henrywhitaker3/go-template/internal/logger"
+	"github.com/henrywhitaker3/shorturl/internal/logger"
 )
 
 var (

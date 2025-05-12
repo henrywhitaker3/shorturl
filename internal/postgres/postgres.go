@@ -5,7 +5,7 @@ import (
 	"database/sql"
 
 	"github.com/XSAM/otelsql"
-	"github.com/henrywhitaker3/go-template/internal/config"
+	"github.com/henrywhitaker3/shorturl/internal/config"
 	_ "github.com/jackc/pgx/v5/stdlib"
 )
 

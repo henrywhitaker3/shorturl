@@ -10,7 +10,7 @@ import (
 	"testing"
 
 	"github.com/henrywhitaker3/boiler"
-	ohttp "github.com/henrywhitaker3/go-template/internal/http"
+	ohttp "github.com/henrywhitaker3/shorturl/internal/http"
 	"github.com/labstack/echo/v4"
 	"github.com/stretchr/testify/require"
 )

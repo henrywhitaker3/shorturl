@@ -1,10 +1,7 @@
-name: go-template
+name: shorturl
 
 log_level: debug
 
-jwt:
-  enabled: true
-  secret: base64:Hznayfuih4eLnZjtNGiwauq0y999FhJWKA8zGwymaoQ
 encryption:
   enabled: true
   secret: base64:32:eoN9P1NndyYjKoeIyoaKxmaVzYCz32ZEc9V0XmXlFM4=

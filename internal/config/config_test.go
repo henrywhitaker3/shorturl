@@ -7,9 +7,9 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/henrywhitaker3/go-template/internal/config"
-	"github.com/henrywhitaker3/go-template/internal/crypto"
-	"github.com/henrywhitaker3/go-template/internal/jwt"
+	"github.com/henrywhitaker3/shorturl/internal/config"
+	"github.com/henrywhitaker3/shorturl/internal/crypto"
+	"github.com/henrywhitaker3/shorturl/internal/jwt"
 	"github.com/stretchr/testify/require"
 	"gopkg.in/yaml.v3"
 )
@@ -79,7 +79,7 @@ func toYaml(t *testing.T, c *config.Config) string {
 
 func DefaultConfig(t *testing.T) *config.Config {
 	return &config.Config{
-		Name:        "go-template",
+		Name:        "shorturl",
 		Environment: "testing",
 		Storage: config.Storage{
 			Enabled: toPtr(true),

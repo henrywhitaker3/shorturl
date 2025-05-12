@@ -1,6 +1,6 @@
 package queue
 
-import "github.com/henrywhitaker3/go-template/internal/uuid"
+import "github.com/henrywhitaker3/shorturl/internal/uuid"
 
 var (
 	Create Queue = "create"

@@ -3,8 +3,8 @@ package urls
 import (
 	"fmt"
 
-	"github.com/henrywhitaker3/go-template/database/queries"
-	"github.com/henrywhitaker3/go-template/internal/uuid"
+	"github.com/henrywhitaker3/shorturl/database/queries"
+	"github.com/henrywhitaker3/shorturl/internal/uuid"
 )
 
 type Url struct {

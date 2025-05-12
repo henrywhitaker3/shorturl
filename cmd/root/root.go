@@ -2,12 +2,12 @@ package root
 
 import (
 	"github.com/henrywhitaker3/boiler"
-	"github.com/henrywhitaker3/go-template/cmd/consume"
-	"github.com/henrywhitaker3/go-template/cmd/migrate"
-	"github.com/henrywhitaker3/go-template/cmd/routes"
-	"github.com/henrywhitaker3/go-template/cmd/secrets"
-	"github.com/henrywhitaker3/go-template/cmd/seed"
-	"github.com/henrywhitaker3/go-template/cmd/serve"
+	"github.com/henrywhitaker3/shorturl/cmd/consume"
+	"github.com/henrywhitaker3/shorturl/cmd/migrate"
+	"github.com/henrywhitaker3/shorturl/cmd/routes"
+	"github.com/henrywhitaker3/shorturl/cmd/secrets"
+	"github.com/henrywhitaker3/shorturl/cmd/seed"
+	"github.com/henrywhitaker3/shorturl/cmd/serve"
 	"github.com/spf13/cobra"
 )
 
@@ -36,7 +36,7 @@ func New(b *boiler.Boiler) *cobra.Command {
 	cmd.AddCommand(secrets.New())
 
 	cmd.PersistentFlags().
-		StringP("config", "c", "go-template.yaml", "The path to the api config file")
+		StringP("config", "c", "shorturl.yaml", "The path to the api config file")
 
 	return cmd
 }
