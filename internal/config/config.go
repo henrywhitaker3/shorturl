@@ -141,11 +141,19 @@ type Profiling struct {
 	Profilers Profilers `yaml:"profilers" env:", prefix=PROFILERS_"`
 }
 
+type Logging struct {
+	Requests struct {
+		All    bool `yaml:"all" env:"ALL, overwrite, default=false"`
+		Errors bool `yaml:"errors" env:"ERRORS, overwrite, default=true"`
+	} `yaml:"requests" env:", prefix=REQUESTS_"`
+}
+
 type Telemetry struct {
 	Tracing   Tracing   `yaml:"tracing"   env:", prefix=TRACING_"`
 	Metrics   Metrics   `yaml:"metrics"   env:", prefix=METRICS_"`
 	Sentry    Sentry    `yaml:"sentry"    env:", prefix=SENTRY_"`
 	Profiling Profiling `yaml:"profiling" env:", prefix=PROFILING_"`
+	Logging   Logging   `yaml:"logging"   env:", prefix=LOGGING_"`
 }
 
 type Probes struct {

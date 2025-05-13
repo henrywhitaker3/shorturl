@@ -5,14 +5,14 @@ import (
 	"fmt"
 	"log/slog"
 
-	lru "github.com/hashicorp/golang-lru/v2"
+	"github.com/henrywhitaker3/shorturl/internal/lru"
 	"github.com/henrywhitaker3/shorturl/internal/uuid"
 	"github.com/prometheus/client_golang/prometheus"
 )
 
 type Cache struct {
 	svc   *Service
-	cache *lru.Cache[string, *Url]
+	cache *lru.LRU[string, *Url]
 
 	keys   prometheus.Gauge
 	hits   prometheus.Counter
@@ -26,7 +26,7 @@ type CacheOpts struct {
 }
 
 func NewCache(opts CacheOpts) (*Cache, error) {
-	cache, err := lru.New[string, *Url](opts.Size)
+	cache, err := lru.New[string, *Url](4, opts.Size)
 	if err != nil {
 		return nil, fmt.Errorf("create lru: %w", err)
 	}

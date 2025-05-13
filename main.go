@@ -61,7 +61,11 @@ func main() {
 		if err != nil {
 			return nil, err
 		}
-		logger.Setup(conf.LogLevel.Level())
+		flush := logger.Setup(b.Context(), conf.LogLevel.Level())
+		b.RegisterShutdown(func(b *boiler.Boiler) error {
+			flush()
+			return nil
+		})
 		return slog.Default(), nil
 	})
 	b.RegisterSetup(func(b *boiler.Boiler) error {

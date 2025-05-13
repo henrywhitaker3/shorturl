@@ -49,7 +49,7 @@ func New(b *boiler.Boiler) *Http {
 	}
 	e.Use(middleware.Zap(conf.LogLevel.Level()))
 	e.Use(mw.Recover())
-	e.Use(middleware.Logger())
+	e.Use(middleware.Logger(conf.Telemetry.Logging))
 	e.Use(mw.CORS())
 
 	h := &Http{

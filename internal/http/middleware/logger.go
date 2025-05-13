@@ -4,12 +4,13 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/henrywhitaker3/shorturl/internal/config"
 	"github.com/henrywhitaker3/shorturl/internal/logger"
 	"github.com/henrywhitaker3/shorturl/internal/tracing"
 	"github.com/labstack/echo/v4"
 )
 
-func Logger() echo.MiddlewareFunc {
+func Logger(conf config.Logging) echo.MiddlewareFunc {
 	return func(next echo.HandlerFunc) echo.HandlerFunc {
 		return func(c echo.Context) error {
 			start := time.Now()
@@ -36,7 +37,9 @@ func Logger() echo.MiddlewareFunc {
 					logger = logger.With("error", err.Error())
 				}
 			}
-			logger.Info("request")
+			if conf.Requests.All || (conf.Requests.Errors && err != nil) {
+				logger.Info("request")
+			}
 			return nil
 		}
 	}
