@@ -24,8 +24,6 @@ with Diagram(
         click2 = Go("click-tracker-2")
         click1 = Go("click-tracker-1")
 
-    generator = Go("Alias generator")
-
     db = RDS("Postgres")
     redis = Redis("Redis")
 
@@ -35,5 +33,3 @@ with Diagram(
 
     redis >> click2
     click2 >> db
-
-    generator << Edge() >> db
