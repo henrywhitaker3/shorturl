@@ -11,3 +11,15 @@ FROM
     clicks
 WHERE
     url_id = $1;
+
+-- name: DeleteClicks :one
+WITH deleted AS (
+    DELETE FROM
+        clicks
+    WHERE
+        clicked_at <= $1 RETURNING *
+)
+SELECT
+    count(*)
+FROM
+    deleted;

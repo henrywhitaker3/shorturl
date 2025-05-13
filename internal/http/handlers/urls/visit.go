@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/henrywhitaker3/boiler"
+	"github.com/henrywhitaker3/shorturl/internal/config"
 	"github.com/henrywhitaker3/shorturl/internal/http/common"
 	"github.com/henrywhitaker3/shorturl/internal/http/middleware"
 	"github.com/henrywhitaker3/shorturl/internal/logger"
@@ -17,12 +18,14 @@ import (
 type VisitHandler struct {
 	urls  urls.Urls
 	queue *queue.Publisher
+	track bool
 }
 
 func NewVisitHandler(b *boiler.Boiler) *VisitHandler {
 	return &VisitHandler{
 		urls:  boiler.MustResolve[urls.Urls](b),
 		queue: boiler.MustResolve[*queue.Publisher](b),
+		track: boiler.MustResolve[*config.Config](b).Tracking.Enabled,
 	}
 }
 
@@ -49,12 +52,14 @@ func (v *VisitHandler) Handler() echo.HandlerFunc {
 			return common.Stack(err)
 		}
 
-		if err := v.queue.Push(ctx, queue.ClickTask, queue.ClickJob{
-			ID:   url.ID,
-			IP:   c.RealIP(),
-			Time: time.Now(),
-		}); err != nil {
-			logger.Logger(ctx).Error("failed to queue click", "error", err)
+		if v.track {
+			if err := v.queue.Push(ctx, queue.ClickTask, queue.ClickJob{
+				ID:   url.ID,
+				IP:   c.RealIP(),
+				Time: time.Now(),
+			}); err != nil {
+				logger.Logger(ctx).Error("failed to queue click", "error", err)
+			}
 		}
 
 		c.Response().

@@ -1,52 +1,57 @@
-# Go Template
+# Shorturl
 
-A template repo for golang APIs, comes with:
+A simple shorturl service backed by postgres and redis
 
-- YAML configs
-- Postgres db connection
-- Atlas/golang-migrate migrations
-- Metrics server
-- Probes server
-- HTTP server
-- Test containers setup
-- SQLC
-- OpenTelemetry Tracing
-- Sentry error tracking
-- User creation/JWT authentication
-- S3/Filesystem storage
-- Pryoscope profiling
+## Architecture
 
-## Get Started
+![Architecture Diagram](./diagrams/assets/architecture.png)
 
-First, create a new repo from the template, then run:
+### App Servers
 
-```
-./hack/rename.sh
-```
+The app server/api creates and serves shorturls.
 
-and follow the promts to rename the go module etc.
+When a request comes in to create a url, a  job is queued in redis to create the
+underlying shorturl.
 
-Then copy the example config file:
+When a shorturl is visited, a local in-memory LRU cache is first checked for
+the url, if it doesn't exist, it is stored in the cache then the client is
+redirected to the long url - this reduces reads to the database.
 
-```
-cp api.example.yaml api.yaml
-```
+### Generator
 
-The config file comes with a pre-generated JWT secret and encryption key, you should generate new secrets with:
+A background process runs that generates aliases (the shorturl id). This way,
+creating a new url only has to reserve an alias in the aliases table instead
+of generating a new one itself and checking if it is available.
 
-```
-task jwt:secret
-task encryption:key
+The number of free aliases available can be modified in the config, but defaults
+to 100,000:
+
+```yaml
+generator:
+    buffer_szie: 250000
 ```
 
-## Running Tests
+### Click Tracking
 
-On every PR, the Dockerfile will be built and unit tests will be run, you can run these manually with:
+If click tracking is turned on:
 
-```
-task build
+```yaml
+tracking:
+    enabled: true
 ```
 
-```
-task test:unit
+Then each visit to a shorturl will queue a job to store the click. This will store:
+
+- The shorturl
+- The IP address
+- The time the url was visited
+
+Visit retention can be configured via config file:
+
+```yaml
+tracking:
+    retention:
+        # If disabled, history will be kept indefinitely
+        enabled: true
+        period: 48h
 ```

@@ -27,6 +27,26 @@ func (q *Queries) CountClicks(ctx context.Context, urlID uuid.UUID) (int64, erro
 	return count, err
 }
 
+const deleteClicks = `-- name: DeleteClicks :one
+WITH deleted AS (
+    DELETE FROM
+        clicks
+    WHERE
+        clicked_at <= $1 RETURNING id, url_id, ip, clicked_at
+)
+SELECT
+    count(*)
+FROM
+    deleted
+`
+
+func (q *Queries) DeleteClicks(ctx context.Context, clickedAt int64) (int64, error) {
+	row := q.db.QueryRowContext(ctx, deleteClicks, clickedAt)
+	var count int64
+	err := row.Scan(&count)
+	return count, err
+}
+
 const storeClick = `-- name: StoreClick :exec
 INSERT INTO
     clicks (id, url_id, ip, clicked_at)

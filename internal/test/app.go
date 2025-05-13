@@ -39,6 +39,7 @@ type UrlOpts struct {
 }
 
 func Url(t *testing.T, b *boiler.Boiler, opts UrlOpts) *urls.Url {
+	require.Nil(t, boiler.MustResolve[*urls.AliasGenerator](b).Run(context.Background()))
 	url, err := boiler.MustResolve[urls.Urls](b).Create(context.Background(), urls.CreateParams{
 		ID:     uuid.MustOrdered(),
 		Url:    "https://example.com",
