@@ -187,6 +187,16 @@ type Cache struct {
 	Size int `yaml:"size" env:"SIZE, overwrite, default=500"`
 }
 
+type Retention struct {
+	Enabled bool          `yaml:"enabled" env:"ENABLED, overwrite, default=true"`
+	Period  time.Duration `yaml:"period"  env:"PERIOD, overwrite, default=48h"`
+}
+
+type Tracking struct {
+	Enabled   bool      `yaml:"enabled"   env:"ENDABLED, overwrite, default=false"`
+	Retention Retention `yaml:"retention" env:", prefix=RETENTION_"`
+}
+
 type Config struct {
 	Name        string `yaml:"name"        env:"APP_NAME"`
 	Environment string `yaml:"environment" env:"APP_ENV, overwrite, default=dev"`
@@ -209,6 +219,7 @@ type Config struct {
 
 	Generator Generator `yaml:"generator" env:", prefix=GENERATOR_"`
 	Cache     Cache     `yaml:"cache"     env:", prefix=CACHE_"`
+	Tracking  Tracking  `yaml:"tracking"  env:", prefix=TRACKING_"`
 }
 
 func Load(path string) (*Config, error) {

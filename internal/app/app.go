@@ -268,8 +268,25 @@ func RegisterRunner(b *boiler.Boiler) (*workers.Runner, error) {
 		return nil, err
 	}
 
+	clicks, err := boiler.Resolve[*urls.Clicks](b)
+	if err != nil {
+		return nil, err
+	}
+	config, err := boiler.Resolve[*config.Config](b)
+	if err != nil {
+		return nil, err
+	}
+
+	retention := urls.NewRetention(urls.RetentionOpts{
+		Clicks: clicks,
+		Config: config.Tracking.Retention,
+	})
+
 	if err := runner.Register(gen); err != nil {
 		return nil, fmt.Errorf("failed to register generator worker: %w", err)
+	}
+	if err := runner.Register(retention); err != nil {
+		return nil, fmt.Errorf("failed to register retention worker: %w", err)
 	}
 
 	return runner, nil

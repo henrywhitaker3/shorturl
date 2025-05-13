@@ -64,6 +64,14 @@ func (c *Clicks) Stats(ctx context.Context, id uuid.UUID) (*Stats, error) {
 	}, nil
 }
 
+func (c *Clicks) Delete(ctx context.Context, olderThan time.Time) (int, error) {
+	deleted, err := c.db.DeleteClicks(ctx, olderThan.Unix())
+	if err != nil {
+		return 0, fmt.Errorf("could not delete clicks: %w", err)
+	}
+	return int(deleted), nil
+}
+
 type ClickJobHandler struct {
 	svc *Clicks
 }

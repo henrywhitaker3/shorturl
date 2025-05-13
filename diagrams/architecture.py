@@ -1,6 +1,6 @@
 # type: ignore
 
-from diagrams import Cluster, Diagram, Edge, Node
+from diagrams import Cluster, Diagram, Edge
 from diagrams.aws.database import RDS
 from diagrams.aws.network import ELB
 from diagrams.onprem.inmemory import Redis
@@ -24,6 +24,8 @@ with Diagram(
         click2 = Go("click-tracker-2")
         click1 = Go("click-tracker-1")
 
+    generator = Go("Alias generator")
+
     db = RDS("Postgres")
     redis = Redis("Redis")
 
@@ -33,3 +35,5 @@ with Diagram(
 
     redis >> click2
     click2 >> db
+
+    generator << Edge() >> db
