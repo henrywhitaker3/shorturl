@@ -15,7 +15,7 @@ underlying shorturl.
 
 When a shorturl is visited, a local in-memory LRU cache is first checked for
 the url, if it doesn't exist, it is stored in the cache then the client is
-redirected to the long url - this reduces reads forwarded to the database.
+redirected to the long url - this reduces reads to the database.
 
 ### Generator
 
