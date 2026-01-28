@@ -9,7 +9,7 @@ require (
 	github.com/docker/go-connections v0.5.0
 	github.com/getsentry/sentry-go v0.32.0
 	github.com/getsentry/sentry-go/echo v0.32.0
-	github.com/go-co-op/gocron/v2 v2.16.1
+	github.com/go-co-op/gocron/v2 v2.19.1
 	github.com/go-kit/log v0.2.1
 	github.com/golang-migrate/migrate/v4 v4.18.3
 	github.com/google/uuid v1.6.0
@@ -34,7 +34,7 @@ require (
 	github.com/redis/rueidis/rueidisotel v1.0.59
 	github.com/sethvargo/go-envconfig v1.3.0
 	github.com/spf13/cobra v1.9.1
-	github.com/stretchr/testify v1.10.0
+	github.com/stretchr/testify v1.11.1
 	github.com/testcontainers/testcontainers-go v0.37.0
 	github.com/testcontainers/testcontainers-go/modules/postgres v0.37.0
 	github.com/thanos-io/objstore v0.0.0-20250317105316-a0136a6f898d
