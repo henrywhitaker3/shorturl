@@ -207,8 +207,8 @@ github.com/henrywhitaker3/rueidisleader v1.0.6 h1:+FPXSY68rk8g8lJpuodKK5QQYd/uNA
 github.com/henrywhitaker3/rueidisleader v1.0.6/go.mod h1:C/1B1tHK2IM/j4XEaTWbEe4XrHyUUNu78vbs1Xuff/M=
 github.com/hibiken/asynq v0.25.1 h1:phj028N0nm15n8O2ims+IvJ2gz4k2auvermngh9JhTw=
 github.com/hibiken/asynq v0.25.1/go.mod h1:pazWNOLBu0FEynQRBvHA26qdIKRSmfdIfUm4HdsLmXg=
-github.com/hibiken/asynq/x v0.0.0-20250401060612-c327bc40a28e h1:Iok0j6qdmvZCzwy64V+flwtAQW4e45hcAHywTZnEaTw=
-github.com/hibiken/asynq/x v0.0.0-20250401060612-c327bc40a28e/go.mod h1:hhpStehaxSGg3ib9wJXzw5AXY1YS6lQ9BNavAgPbIhE=
+github.com/hibiken/asynq/x v0.0.0-20260203063626-d704b68a426d h1:Ld5m8EIK5QVOq/owOexKIbETij3skACg4eU1pArHsrw=
+github.com/hibiken/asynq/x v0.0.0-20260203063626-d704b68a426d/go.mod h1:hhpStehaxSGg3ib9wJXzw5AXY1YS6lQ9BNavAgPbIhE=
 github.com/huaweicloud/huaweicloud-sdk-go-obs v3.23.3+incompatible h1:tKTaPHNVwikS3I1rdyf1INNvgJXWSf/+TzqsiGbrgnQ=
 github.com/huaweicloud/huaweicloud-sdk-go-obs v3.23.3+incompatible/go.mod h1:l7VUhRbTKCzdOacdT4oWCwATKyvZqUOlOqr0Ous3k4s=
 github.com/inconshreveable/mousetrap v1.1.0 h1:wN+x4NVGpMsO7ErUn/mUI3vEoE6Jt13X2s0bqwp9tc8=
