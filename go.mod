@@ -21,7 +21,7 @@ require (
 	github.com/henrywhitaker3/go-cache v1.1.0
 	github.com/henrywhitaker3/rueidisleader v1.0.6
 	github.com/hibiken/asynq v0.25.1
-	github.com/hibiken/asynq/x v0.0.0-20250401060612-c327bc40a28e
+	github.com/hibiken/asynq/x v0.0.0-20260203063626-d704b68a426d
 	github.com/jackc/pgx/v5 v5.7.4
 	github.com/labstack/echo-contrib v0.17.4
 	github.com/labstack/echo/v4 v4.13.3
