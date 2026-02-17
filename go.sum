@@ -316,12 +316,12 @@ github.com/prometheus/common v0.63.0 h1:YR/EIY1o3mEFP/kZCD7iDMnLPlGyuU2Gb3HIcXnA
 github.com/prometheus/common v0.63.0/go.mod h1:VVFF/fBIoToEnWRVkYoXEkq3R3paCoxG9PXP74SnV18=
 github.com/prometheus/procfs v0.16.1 h1:hZ15bTNuirocR6u0JZ6BAHHmwS1p8B4P6MRqxtzMyRg=
 github.com/prometheus/procfs v0.16.1/go.mod h1:teAbpZRB1iIAJYREa1LsoWUXykVXA1KlTmWl8x/U+Is=
-github.com/redis/go-redis/extra/rediscmd/v9 v9.8.0 h1:/A+PnpT6ufTUt/6YPXiZlCRoyyfEnDag5WGrEK8Gq0I=
-github.com/redis/go-redis/extra/rediscmd/v9 v9.8.0/go.mod h1:FGO4BNjl5TfH9U771826GIW2Ul4pOEqHAN+0xjfw+dU=
-github.com/redis/go-redis/extra/redisotel/v9 v9.8.0 h1:mnKrl8WqyGJK4pletf2itS+Te/ng3Qm4YjtveY406J8=
-github.com/redis/go-redis/extra/redisotel/v9 v9.8.0/go.mod h1:iObamxrrXt4hGWiCWv5BAs68xPYc/MfrLd34H9TaKyk=
-github.com/redis/go-redis/v9 v9.8.0 h1:q3nRvjrlge/6UD7eTu/DSg2uYiU2mCL0G/uzBWqhicI=
-github.com/redis/go-redis/v9 v9.8.0/go.mod h1:huWgSWd8mW6+m0VPhJjSSQ+d6Nh1VICQ6Q5lHuCH/Iw=
+github.com/redis/go-redis/extra/rediscmd/v9 v9.18.0 h1:QY4nmPHLFAJjtT5O4OMUEOxP8WVaRNOFpcbmxT2NLZU=
+github.com/redis/go-redis/extra/rediscmd/v9 v9.18.0/go.mod h1:WH8cY/0fT41Bsf341qzo8v4nx0GCE8FykAA23IVbVmo=
+github.com/redis/go-redis/extra/redisotel/v9 v9.18.0 h1:2dKdoEYBJ0CZCLPiCdvvc7luz3DPwY6hKdzjL6m1eHE=
+github.com/redis/go-redis/extra/redisotel/v9 v9.18.0/go.mod h1:WzkrVG9ro9BwCQD0eJOWn6AGL4Z1CleGflM45w1hu10=
+github.com/redis/go-redis/v9 v9.18.0 h1:pMkxYPkEbMPwRdenAzUNyFNrDgHx9U+DrBabWNfSRQs=
+github.com/redis/go-redis/v9 v9.18.0/go.mod h1:k3ufPphLU5YXwNTUcCRXGxUoF1fqxnhFQmscfkCoDA0=
 github.com/redis/rueidis v1.0.59 h1:r4SpgqrKnKwO2omN+BB5+24OCu+K15zmf/2b/zP7NKw=
 github.com/redis/rueidis v1.0.59/go.mod h1:Lkhr2QTgcoYBhxARU7kJRO8SyVlgUuEkcJO1Y8MCluA=
 github.com/redis/rueidis/rueidisotel v1.0.59 h1:xrEhQQbuX+Z5zPAFI+tts9rwA3yXXFgJellGabb/oG4=
@@ -385,6 +385,8 @@ github.com/yusufpapurcu/wmi v1.2.4 h1:zFUKzehAFReQwLys1b/iSMl+JQGSCSjtVqQn9bBrPo
 github.com/yusufpapurcu/wmi v1.2.4/go.mod h1:SBZ9tNy3G9/m5Oi98Zks0QjeHVDvuK0qfxQmPyzfmi0=
 github.com/zeebo/errs v1.4.0 h1:XNdoD/RRMKP7HD0UhJnIzUy74ISdGGxURlYG8HSWSfM=
 github.com/zeebo/errs v1.4.0/go.mod h1:sgbWHsvVuTPHcqJJGQ1WhI5KbWlHYz+2+2C/LSEtCw4=
+github.com/zeebo/xxh3 v1.0.2 h1:xZmwmqxHZA8AI603jOQ0tMqmBr9lPeFwGg6d+xy9DC0=
+github.com/zeebo/xxh3 v1.0.2/go.mod h1:5NWz9Sef7zIDm2JHfFlcQvNekmcEl9ekUZQQKCYaDcA=
 go.opentelemetry.io/auto/sdk v1.1.0 h1:cH53jehLUN6UFLY71z+NDOiNJqDdPRaXzTel0sJySYA=
 go.opentelemetry.io/auto/sdk v1.1.0/go.mod h1:3wSPjt5PWp2RhlCcmmOial7AvC4DQqZb7a7wCow3W8A=
 go.opentelemetry.io/contrib/detectors/gcp v1.34.0 h1:JRxssobiPg23otYU5SbWtQC//snGVIM3Tx6QRzlQBao=
