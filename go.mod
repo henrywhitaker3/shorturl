@@ -24,7 +24,7 @@ require (
 	github.com/hibiken/asynq/x v0.0.0-20250401060612-c327bc40a28e
 	github.com/jackc/pgx/v5 v5.7.4
 	github.com/labstack/echo-contrib v0.17.4
-	github.com/labstack/echo/v4 v4.13.3
+	github.com/labstack/echo/v4 v4.15.1
 	github.com/lib/pq v1.10.9
 	github.com/pkg/errors v0.9.1
 	github.com/prometheus/client_golang v1.22.0
@@ -34,7 +34,7 @@ require (
 	github.com/redis/rueidis/rueidisotel v1.0.59
 	github.com/sethvargo/go-envconfig v1.3.0
 	github.com/spf13/cobra v1.9.1
-	github.com/stretchr/testify v1.10.0
+	github.com/stretchr/testify v1.11.1
 	github.com/testcontainers/testcontainers-go v0.37.0
 	github.com/testcontainers/testcontainers-go/modules/postgres v0.37.0
 	github.com/thanos-io/objstore v0.0.0-20250317105316-a0136a6f898d
@@ -45,7 +45,7 @@ require (
 	go.opentelemetry.io/otel/sdk v1.35.0
 	go.opentelemetry.io/otel/trace v1.35.0
 	go.uber.org/automaxprocs v1.6.0
-	golang.org/x/crypto v0.38.0
+	golang.org/x/crypto v0.46.0
 	gopkg.in/yaml.v3 v3.0.1
 )
 
@@ -142,11 +142,11 @@ require (
 	go.uber.org/atomic v1.11.0 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
 	go.uber.org/zap v1.27.0 // indirect
-	golang.org/x/net v0.40.0 // indirect
-	golang.org/x/sync v0.14.0 // indirect
-	golang.org/x/sys v0.33.0 // indirect
-	golang.org/x/text v0.25.0 // indirect
-	golang.org/x/time v0.11.0 // indirect
+	golang.org/x/net v0.48.0 // indirect
+	golang.org/x/sync v0.19.0 // indirect
+	golang.org/x/sys v0.39.0 // indirect
+	golang.org/x/text v0.32.0 // indirect
+	golang.org/x/time v0.14.0 // indirect
 	google.golang.org/genproto/googleapis/api v0.0.0-20250218202821-56aae31c358a // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20250422160041-2d3770c4ea7f // indirect
 	google.golang.org/grpc v1.72.0 // indirect
